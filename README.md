@@ -111,7 +111,7 @@ Name:
     task create
 
 Description:
-    Create tasks from files in a local directory or files in Sama's S3 Bucket.
+    Create a batch of tasks from files in a local directory or files in Sama's S3 Bucket.
 
 Usage:
     sama task create <localPath or S3Path> [flags]
@@ -146,9 +146,9 @@ Flags:
 
 ## Examples
 
-### Creating tasks given a local path. Project has single URL input.
+### Creating a batch of tasks given a local path
 ```
-The mapping file can be automatically be generated during init. e.g.
+The mapping json can be automatically be generated during init. e.g.
     { 
         "name": "{{ .BaseName }}",
         "url": "{{.URL}}"
@@ -175,10 +175,10 @@ Output:
         "url" : "https://sama-client-assets.s3.amazonaws.com/123/assets_001/video003.mp4"
 ```
 
-### Creating tasks given a S3Path. Project has single URL input.
+### Creating a batch of tasks given a S3 path
 
 ```
-The mapping file can be automatically be generated during init. e.g.
+The mapping json can be automatically be generated during init. e.g.
     { 
         "name": "{{ .BaseName }}",
         "url": "{{.URL}}"
@@ -204,33 +204,11 @@ Output:
         "url" : "https://sama-client-assets.s3.amazonaws.com/123/assets/assets_batch002/video003.mp4"
 ```
 
-### Monitoring a batch immediately from task create command
+
+### Creating a batch of tasks that contains multiple URL inputs; for example, a 3D project with 2D helper videos
 
 ```
-Add the --monitor flag to 'task create':
-
-$ sama task create assets_batch002 --monitor
-
-```
-
-### Monitor batch
-
-```
-Assume that batch 11236 exists. Call 'task monitor':
-
-$ sama task monitor 11236
-
-Output:
- Batch 11236: 
-  uploaded...
-
-```
-
-
-### Creating tasks given a local path. Project has multiple URL inputs, for example, a 3D project with 2D helper videos
-
-```
-The mapping file will be automatically be generated during init as, for example:
+The mapping json will be automatically be generated during init as, for example:
     {
         "name": "{{ .BaseName }}", 
         "3d_url_input": "{{.URL}}",
@@ -239,7 +217,8 @@ The mapping file will be automatically be generated during init as, for example:
         "2d_front_url_input": "{{.URL}}"
     }
 
-However, since there are multiple URL inputs, the folder containing the correct assets need to be specified, for example: 
+However, since there are multiple URL inputs, the folder or files containing the correct assets need to be specified. 
+Folder example (don't forget to include the trailing "/" at the end of the folder names): 
     {
         "name": "{{ .BaseName }}", 
         "3d_url_input": "{{.URL}}lidar/",
@@ -247,8 +226,16 @@ However, since there are multiple URL inputs, the folder containing the correct 
         "2d_back_url_input": "{{.URL}}back_video/",
         "2d_front_url_input": "{{.URL}}front_video/"
     }
+File example:
+    {
+        "name": "{{ .BaseName }}", 
+        "3d_url_input": "{{.URL}}lidar.zip",
+        "3d_sensor_location" : "{{.URL}}sensor_location.zip",
+        "2d_back_url_input": "{{.URL}}back_video.mp4",
+        "2d_front_url_input": "{{.URL}}front_video.mp4"
+    }
 
-The following 'task create' command creates a task for each 3d folder. Assume the following asset folder exists locally:
+The following 'task create' command creates a task for each folder which is a sequence. Assume the following asset folder exists locally (you would use the mapping json with the folder example above):
     ./assets/
         assets_batch001/
             sequence1/
@@ -297,7 +284,54 @@ Output:
 ```
 
 
-### Creating tasks where files are contained in separate folder and is considered it's own batch. 
+
+### Monitoring the status of a batch immediately from task create command
+
+```
+Add the --monitor flag to 'task create':
+
+$ sama task create assets_batch002 --monitor
+
+```
+
+### Monitoring the status of a batch
+
+```
+Assume that batch 11236 exists. Call 'task monitor':
+
+$ sama task monitor 11236
+
+Output:
+ Batch 11236: 
+  uploaded...
+
+```
+
+### Creating a batch of tasks and specifying a client batch id
+
+```
+The mapping json can be automatically be generated during init. e.g.
+    { 
+        "url": "{{.URL}}",
+        "name": "{{ .BaseName }}",
+        "client batch id": "{{ .ClientBatchID }}"
+     }
+
+The following 'task create' command creates task for each file. Assume the following assets exists locally:
+    ./assets/
+        assets_batch001/
+            img001.png
+            img002.png
+            img003.png
+
+
+$ sama task create ./assets/assets_batch001 --client-batch-id "my_batch_001"
+
+Output:
+    A batch will create individual tasks for img001.png, img002.png, img003.png and 'client batch id' is set to 'my_batch_001'.
+```
+
+### Creating multiple batch of tasks where each parent folder is considered a separate batch
 
 ```
 The mapping file can be automatically be generated during init. e.g.
@@ -320,11 +354,11 @@ The following 'task create' command creates task for each file. Assume the follo
 $ sama task create ./assets --in-batches
 
 Output:
-    A batch will create individual tasks for img001.png, img002.png, img003.png.
-    A batch will create individual tasks for img004.png, img005.png, img006.png.
+    Batch 1 will create individual tasks for img001.png, img002.png, img003.png.
+    Batch 2 will create individual tasks for img004.png, img005.png, img006.png.
 ```
 
-### Creating tasks where files are contained in separate folder and is considered it's own batch, plus assigning the folder as the client-batch-id 
+### Creating multiple batch of tasks where each parent folder is considered a separate batch, and automatically assign the client batch id as the parent folder
 ```
 The mapping file can be automatically be generated during init. e.g.
     { 
@@ -347,35 +381,13 @@ The following 'task create' command creates task for each file. Assume the follo
 $ sama task create ./assets --in-client-batches
 
 Output:
-    A batch will create individual tasks for img001.png, img002.png, img003.png and 'client batch id' is set to assets_batch001.
-    A batch will create individual tasks for img004.png, img005.png, img006.png and 'client batch id' is set to assets_batch002.
+    Batch 1 will create individual tasks for img001.png, img002.png, img003.png and 'client batch id' is set to assets_batch001.
+    Batch 2 will create individual tasks for img004.png, img005.png, img006.png and 'client batch id' is set to assets_batch002.
 ```
 
-### Creating tasks and specified a client-batch-id
-
-```
-The mapping file can be automatically be generated during init. e.g.
-    { 
-        "url": "{{.URL}}",
-        "name": "{{ .BaseName }}",
-        "client batch id": "{{ .ClientBatchID }}"
-     }
-
-The following 'task create' command creates task for each file. Assume the following assets exists locally:
-    ./assets/
-        assets_batch001/
-            img001.png
-            img002.png
-            img003.png
 
 
-$ sama task create ./assets/assets_batch001 --client-batch-id "my_batch_001"
-
-Output:
-    A batch will create individual tasks for img001.png, img002.png, img003.png and 'client batch id' is set to 'my_batch_001'.
-```
-
-### Create tasks and group them according to size
+### Create a batch of tasks and group them according to size
 
 ```
 The mapping file can be automatically be generated during init. e.g.
@@ -402,19 +414,19 @@ Output:
     Invididual tasks are created for img005.png and are assigned to the same group id (auto assigned).
 ```
 
-### Export tasks to CSV or JSON
+### Creating an export of a batch of tasks to CSV or JSON file
 ```
 $ sama task create ./assets_batch001 --output tasks.csv
 $ sama task create ./assets_batch001 --output tasks.json
 ```
 
-### Create tasks from a CSV or JSON
+### Creating a batch of tasks from a CSV or JSON file
 ```
 $ sama task create --from-file ./tasks.csv
 $ sama task create --from-file ./tasks.json
 ```
 
-### Create tasks from assets that were modified within a date range
+### Creating a batch of tasks from assets that were modified within a date range
 ```
 $ sama task create ./assets/assets_batch001 –modified-after 2021-06-10T00:00:00Z –modified-before 2021-06-24T00:00:00Z
 ```
