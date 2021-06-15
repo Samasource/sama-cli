@@ -52,7 +52,7 @@ Use "sama [command] --help" for more information about a command.
 
 ## Configuration
 
-Before using the Sama CLI, you need to specify the Sama Project ID, API Key, and AWS credentials to Sama's S3 Bucket to use, all which are provided by your Sama project manager. The following instructions also assume that your Sama Project manager has already configured all the neccessary Sama Project inputs and outputs.
+Before using the Sama CLI, you need to specify the Sama Project ID, API Key, and AWS credentials to Sama's S3 Bucket, all which are provided by your Sama project manager. The following instructions also assume that your Sama Project manager has already configured all the neccessary Sama Project inputs and outputs.
 
 Create a new folder and set the current working directory to it. For example,
 ```sh
@@ -87,11 +87,11 @@ The above example has a Sama Project already set up with inputs "name"(string), 
 ### Configuring the mapping json
 
 The mapping json, **mapping.json.gotmpl**, contains your Sama Project inputs and values that will be sent during task creation. The values that you see in **{{ }}** are special variables used by the CLI and are replaced during task creation. The list of special variables are:
-- "{{ .BaseName }}" - gets replaced by the asset's name, e.g. image001.png
-- "{{ .URL }}" - gets replaced by the asset's URL path in Sama's S3, e.g. https&#65279;://sama-client-assets.s3.amazonaws.com/123/assets_batch001/image001.png
-- "{{ .ClientBatchID }}" - gets replaced by the string specified with the --client-batch-id flag
-- "{{ .GroupID }}" - gets replaced by a unique groupID when using the --group-size flag
-- "{{ .FileSizeBytes }}" - gets replaced by the asset's file size
+- `"{{ .BaseName }}"` - gets replaced by the asset's name, e.g. image001.png.
+- `"{{ .URL }}"` - gets replaced by the asset's URL path in Sama's S3, e.g. https&#65279;://sama-client-assets.s3.amazonaws.com/123/assets_batch001/image001.png
+- `"{{ .ClientBatchID }}"` - gets replaced by the string specified with the --client-batch-id flag
+- `"{{ .GroupID }}"` - gets replaced by a unique groupID when using the --group-size flag
+- `"{{ .FileSizeBytes }}"` - gets replaced by the asset's file size
 
 When you call `sama init`, the CLI will do it's best to automatically use the special variables depending on your Sama Project's inputs.
 - If you have an input called "name", "asset name", or "file name", the CLI will automatically insert "{{ .BaseName }}" as it's value.
