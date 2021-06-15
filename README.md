@@ -1,6 +1,6 @@
 # Sama CLI
 
-The Sama CLI helps you to create tasks in the Sama Platform right from the terminal.
+The Sama CLI helps you to create tasks in your Sama Project right from the terminal.
 
 With the Sama CLI, you can:
 
@@ -24,7 +24,7 @@ brew install sama
 
 ### Windows
 
-Sama CLI is available on Windows as a downloadable MSI.
+Sama CLI is available on Windows. Download the latest ".msi" file from the [release page](https://github.com/Samasource/sama-cli/releases/tag/v1.0.0) and open it to run the installer.
 
 ## Usage
 
@@ -105,11 +105,19 @@ If needed, modify **mapping.json.gotmpl** so that the proper data is sent during
 ## Commands
 
 ### `task create`
-```sh
-Create tasks from local file system or S3
+```
+Name:
+    task create
+
+Description:
+    Create tasks from files in a local directory or files in Sama's S3 Bucket.
 
 Usage:
-  sama task create <localPath or S3Path> [flags]
+    sama task create <localPath or S3Path> [flags]
+
+    localPath: represents the path of a local directory. It must be written as a relative path starting with "./",  for example, "./assets"
+    S3Path: represents the location of your Sama S3 directory. It must be written as a relative path from your Sama S3 directory, for example, if your assets are stored in s3://sama-client-assets/123/assets, the S3Path would be "assets"
+   
 Flags:
       --client-batch-id string   client batch id value for mapping substitution
       --group-size int           will group tasks with this group size
