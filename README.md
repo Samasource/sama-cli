@@ -29,7 +29,7 @@ Sama CLI is available on Windows. Download the latest ".msi" file from the [rele
 
 ## Usage
 
-Installing the CLI provides access to the `sama` command from the terminal.
+Installing the CLI provides access to the `sama` command from Terminal on a Mac and Command Prompt on Windows.
 
 Run the `sama` command to test if the CLI has been successfully installed:
 
