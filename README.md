@@ -11,7 +11,7 @@ With the Sama CLI, you can:
 
 ## Installation
 
-Sama CLI is available for macOS, and Windows.
+Sama CLI is available for macOS, Windows, and Linux. 
 
 ### macOS
 
@@ -25,11 +25,17 @@ Note: You may need to preform `xcode-select --install` if you don't have xcode a
 
 ### Windows
 
-Sama CLI is available on Windows. Download the latest ".msi" file from the [release page](https://github.com/Samasource/sama-cli/releases/tag/v1.0.0) and open it to run the installer.
+Sama CLI is available on Windows. Download the latest ".msi" file from the [release page](https://github.com/Samasource/sama-cli/releases/latest) and open it to run the installer.
+
+### Linux
+
+Download the latest linux tar.gz file from the [release page](https://github.com/Samasource/sama-cli/releases/latest).
+Unzip the file: tar -xvf sama-cli_x.x.x_linux_x86_64.tar.gz
+Run the executable: ./sama or put in your PATH
 
 ## Usage
 
-Installing the CLI provides access to the `sama` command from the terminal.
+Installing the CLI provides access to the `sama` command from Terminal on a Mac and Command Prompt on Windows.
 
 Run the `sama` command to test if the CLI has been successfully installed:
 
@@ -417,8 +423,8 @@ Output:
 
 ### Creating an export of a batch of tasks to CSV or JSON file
 ```
-$ sama task create ./assets_batch001 --output tasks.csv
-$ sama task create ./assets_batch001 --output tasks.json
+$ sama task create assets_batch001 --output tasks.csv
+$ sama task create assets_batch001 --output tasks.json
 ```
 
 ### Creating a batch of tasks from a CSV or JSON file
