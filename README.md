@@ -29,9 +29,9 @@ Sama CLI is available on Windows. Download the latest ".msi" file from the [rele
 
 ### Linux
 
-Download the latest linux tar.gz file from the [release page](https://github.com/Samasource/sama-cli/releases/latest).
-Unzip the file: tar -xvf sama-cli_x.x.x_linux_x86_64.tar.gz
-Run the executable: ./sama or put in your PATH
+- Download the latest linux tar.gz file from the [release page](https://github.com/Samasource/sama-cli/releases/latest).
+- Unzip the file: tar -xvf sama-cli_x.x.x_linux_x86_64.tar.gz
+- Run the executable: ./sama or put in your PATH
 
 ## Usage
 
