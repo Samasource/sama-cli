@@ -11,7 +11,7 @@ With the Sama CLI, you can:
 
 ## Installation
 
-Sama CLI is available for macOS, and Windows.
+Sama CLI is available for macOS, Windows, and Linux. 
 
 ### macOS
 
@@ -25,7 +25,13 @@ Note: You may need to preform `xcode-select --install` if you don't have xcode a
 
 ### Windows
 
-Sama CLI is available on Windows. Download the latest ".msi" file from the [release page](https://github.com/Samasource/sama-cli/releases/tag/v1.0.0) and open it to run the installer.
+Sama CLI is available on Windows. Download the latest ".msi" file from the [release page](https://github.com/Samasource/sama-cli/releases/latest) and open it to run the installer.
+
+### Linux
+
+Download the latest linux tar.gz file from the [release page](https://github.com/Samasource/sama-cli/releases/latest).
+Unzip the file: tar -xvf sama-cli_x.x.x_linux_x86_64.tar.gz
+Run the executable: ./sama or put in your PATH
 
 ## Usage
 
