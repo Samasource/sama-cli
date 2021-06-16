@@ -38,6 +38,7 @@ $ sama
 Sama CLI for interacting with the sama API
 
 Usage:
+  sama [flags]
   sama [command]
 
 Available Commands:
@@ -46,7 +47,8 @@ Available Commands:
   task        Root of task command tree
 
 Flags:
-  -h, --help   help for sama
+  -h, --help      help for sama
+  -v, --version   version for sama
 
 Use "sama [command] --help" for more information about a command.
 ```
@@ -85,7 +87,7 @@ You'll then be prompted to create the mapping json which contains your Sama Proj
 ```
 The above example has a Sama Project already set up with inputs "name"(string), "url"(URL), "client batch id"(string), "group id"(string), and "file size"(string). The mapping json will be saved into **.mapping.json.gotmpl** in your current working directory.
 
-### Configuring the mapping json
+### Advanced configuration of the mapping json
 
 The mapping json, **mapping.json.gotmpl**, contains your Sama Project inputs and values that will be sent during task creation. The values that you see in **{{ }}** are special variables used by the CLI and are replaced during task creation. The list of special variables are:
 - `"{{ .BaseName }}"` - gets replaced by the asset's name, e.g. image001.png.
@@ -114,10 +116,10 @@ Description:
     Create a batch of tasks from files in a local directory or files in Sama's S3 Bucket.
 
 Usage:
-    sama task create <localPath or S3Path> [flags]
+    sama task create <LocalPathFolder or S3UriFolder> [flags]
 
-    localPath: represents the path of a local directory. It must be written as a relative path starting with "./",  for example, "./assets"
-    S3Path: represents the location of your Sama S3 directory. It must be written as a relative path from your Sama S3 directory, for example, if your assets are stored in s3://sama-client-assets/123/assets, the S3Path would be "assets"
+    LocalPathFolder: represents the path of a local folder.
+    S3UriFolder: represents the location of a Sama S3 folder. This must be written in the form s3://sama-client-assets/myclientid/myfolder where myfolder can have additional subfolders
    
 Flags:
       --client-batch-id string   client batch id value for mapping substitution
@@ -155,13 +157,13 @@ The mapping json can be automatically be generated during init. e.g.
     }
 
 The following 'task create' command creates a task for each video file. Assume the following asset folder exists locally:
-    ./assets/
+    assets/
         assets_batch001/ 
             video001.mp4
             video002.mp4
             video003.mp4
 
-$ sama task create ./assets/assets_batch001
+$ sama task create assets/assets_batch001/
         
 Output:
     A task will be created for video001.mp4:
@@ -190,7 +192,7 @@ The following 'task create' command creates a task for each video file. Assume t
         video002.mp4
         video003.mp4
 
-$ sama task create assets/assets_batch002
+$ sama task create s3://sama-client-assets/123/assets/assets_batch002/
         
 Output:
     A task will be created for video001.mp4:
@@ -236,7 +238,7 @@ File example:
     }
 
 The following 'task create' command creates a task for each folder which is a sequence. Assume the following asset folder exists locally (you would use the mapping json with the folder example above):
-    ./assets/
+    assets/
         assets_batch001/
             sequence1/
                  lidar/    
@@ -265,7 +267,7 @@ The following 'task create' command creates a task for each folder which is a se
                     001.csv
                     002.csv
 
-$ sama task create ./assets/assets_batch001
+$ sama task create assets/assets_batch001
 
 Output:
     A task will be created for sequence1/:
@@ -318,14 +320,14 @@ The mapping json can be automatically be generated during init. e.g.
      }
 
 The following 'task create' command creates task for each file. Assume the following assets exists locally:
-    ./assets/
+    assets/
         assets_batch001/
             img001.png
             img002.png
             img003.png
 
 
-$ sama task create ./assets/assets_batch001 --client-batch-id "my_batch_001"
+$ sama task create assets/assets_batch001 --client-batch-id "my_batch_001"
 
 Output:
     A batch will create individual tasks for img001.png, img002.png, img003.png and 'client batch id' is set to 'my_batch_001'.
@@ -351,7 +353,7 @@ The following 'task create' command creates task for each file. Assume the follo
             img005.png
             img006.png
 
-$ sama task create ./assets --in-batches
+$ sama task create assets --in-batches
 
 Output:
     Batch 1 will create individual tasks for img001.png, img002.png, img003.png.
@@ -381,8 +383,7 @@ The following 'task create' command creates task for each file. Assume the follo
 $ sama task create ./assets --in-client-batches
 
 Output:
-    Batch 1 will create individual tasks for img001.png, img002.png, img003.png and 'client batch id' is set to assets_batch001.
-    Batch 2 will create individual tasks for img004.png, img005.png, img006.png and 'client batch id' is set to assets_batch002.
+    A batch will create individual tasks for img001.png, img002.png, img003.png, and 'client batch id' is set to assets_batch001. The same batch will also create img004.png, img005.png, img006.png and 'client batch id' is set to assets_batch002.
 ```
 
 
@@ -398,7 +399,7 @@ The mapping file can be automatically be generated during init. e.g.
      }
 
 The following 'task create' command creates task for each file. Assume the following assets exists locally:
-    ./assets/
+    assets/
         assets_batch001/
             img001.png
             img002.png
@@ -406,7 +407,7 @@ The following 'task create' command creates task for each file. Assume the follo
             img004.png
             img005.png
 
-$ sama task create ./assets/assets_batch001 --group-size 2
+$ sama task create assets/assets_batch001 --group-size 2
 
 Output:
     Invididual tasks are created for img001.png, img002.png and are assigned to the same group id (auto assigned).
@@ -422,11 +423,11 @@ $ sama task create ./assets_batch001 --output tasks.json
 
 ### Creating a batch of tasks from a CSV or JSON file
 ```
-$ sama task create --from-file ./tasks.csv
-$ sama task create --from-file ./tasks.json
+$ sama task create --from-file tasks.csv
+$ sama task create --from-file tasks.json
 ```
 
 ### Creating a batch of tasks from assets that were modified within a date range
 ```
-$ sama task create ./assets/assets_batch001 –modified-after 2021-06-10T00:00:00Z –modified-before 2021-06-24T00:00:00Z
+$ sama task create assets/assets_batch001 –modified-after 2021-06-10T00:00:00Z –modified-before 2021-06-24T00:00:00Z
 ```
