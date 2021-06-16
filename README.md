@@ -417,8 +417,8 @@ Output:
 
 ### Creating an export of a batch of tasks to CSV or JSON file
 ```
-$ sama task create ./assets_batch001 --output tasks.csv
-$ sama task create ./assets_batch001 --output tasks.json
+$ sama task create assets_batch001 --output tasks.csv
+$ sama task create assets_batch001 --output tasks.json
 ```
 
 ### Creating a batch of tasks from a CSV or JSON file
