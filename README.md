@@ -19,7 +19,7 @@ Sama CLI is available on macOS via [Homebrew](https://brew.sh/):
 
 ```sh
 brew tap Samasource/formulas
-brew install sama
+brew install sama-cli
 ```
 Note: You may need to preform `xcode-select --install` if you don't have xcode already installed.
 
