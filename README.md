@@ -128,16 +128,19 @@ Usage:
     S3UriFolder: represents the location of a Sama S3 folder. This must be written in the form s3://sama-client-assets/myclientid/myfolder where myfolder can have additional subfolders
    
 Flags:
-      --client-batch-id string   client batch id value for mapping substitution
-      --group-size int           will group tasks with this group size
-  -h, --help                     help for create
-      --in-batches               send each folder as its own batch
-      --in-client-batches        send each folder as its own batch substituting the folder name as ClientBatchID
-      --modified-after string    creates tasks from assets that were modified after given datetime string
-      --modified-before string   creates tasks from assets that were modified before given datetime string
-      --monitor                  if present will monitor the batch of tasks immediately after creation
-      --output string            if present will output the task data to output file instead of sending task creation request
-      --from-file                when true treats the path as local file path to a csv or json batch upload file
+      --client-batch-id string      client batch id value for mapping substitution
+      --deep                        finds tasks by recursively finding files in target folder
+      --ext string                  comma separated list of file extensions to filter task files on
+      --from-file                   when true treats the path as local file path to a csv or json batch upload file
+      --group-size int              will group tasks with this group size
+  -h, --help                        help for create
+      --in-batches                  send each folder as its own batch
+      --in-client-batches           send each folder as its own batch substituting the folder name as ClientBatchID
+      --modified-after string       creates tasks from assets that were modified after given datetime string
+      --modified-before string      creates tasks from assets that were modified before given datetime string
+      --monitor                     if present will monitor the batch of tasks immediately after creation
+      --output string               if present will output the task data to output file instead of sending task creation request
+      --upload-path-prefix string   if present will upload to S3 with the provided path prefix
 ```
 
 ### `task monitor`
@@ -211,7 +214,6 @@ Output:
         "name" : video003.mp4
         "url" : "https://sama-client-assets.s3.amazonaws.com/123/assets/assets_batch002/video003.mp4"
 ```
-
 
 ### Creating a batch of tasks that contains multiple URL inputs; for example, a 3D project with 2D helper videos
 
@@ -393,7 +395,6 @@ Output:
 ```
 
 
-
 ### Create a batch of tasks and group them according to size
 
 ```
@@ -419,6 +420,66 @@ Output:
     Invididual tasks are created for img001.png, img002.png and are assigned to the same group id (auto assigned).
     Invididual tasks are created for img003.png, img004.png and are assigned to the same group id (auto assigned).
     Invididual tasks are created for img005.png and are assigned to the same group id (auto assigned).
+```
+
+### Creating a batch of tasks and filter specific file types
+```
+The mapping json can be automatically be generated during init. e.g.
+    { 
+        "name": "{{ .BaseName }}",
+        "url": "{{.URL}}"
+    }
+
+The following 'task create' command creates a task for each video file. Assume the following asset folder exists locally:
+    assets/
+        assets_batch001/ 
+            img1.jpg
+            img2.png
+            file2.txt
+            unsupported.jp2
+            
+
+$ sama task create assets/assets_batch001/ --ext ".jpg,.png"
+        
+Output:
+    A task will be created for img1.jpg:
+        "name" : img1.jpg
+        "url" : "https://sama-client-assets.s3.amazonaws.com/123/assets_001/img1.jpg"
+    A task will be created for img2.png:
+        "name" : img2.png
+        "url" : "https://sama-client-assets.s3.amazonaws.com/123/assets_001/img2.png"
+```
+
+
+### Creating a batch of tasks by finding recursively finding files in target folder (deprecated)
+```
+The mapping json can be automatically be generated during init. e.g.
+    { 
+        "name": "{{ .BaseName }}",
+        "url": "{{.URL}}"
+    }
+
+The following 'task create' command creates a task for each video file. Assume the following asset folder exists locally:
+    assets/
+        assets_batch001/ 
+            img1.jpg
+            subfolder1/
+                img2.jpg
+                subfolder2/
+                    img3.jpg
+
+$ sama task create assets/assets_batch001/ --deep
+        
+Output:
+    A task will be created for img1.jpg:
+        "name" : img1.jpg
+        "url" : "https://sama-client-assets.s3.amazonaws.com/123/assets_001/img1.jpg"
+    A task will be created for img2.jpg:
+        "name" : img2.jpg
+        "url" : "https://sama-client-assets.s3.amazonaws.com/123/assets_001/subfolder1/img2.jpg"
+    A task will be created for img3.jpg:
+        "name" : img3.jpg
+        "url" : "https://sama-client-assets.s3.amazonaws.com/123/assets_001/subfolder1/subfolder2/img3.jpg"
 ```
 
 ### Creating an export of a batch of tasks to CSV or JSON file
