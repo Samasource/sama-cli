@@ -97,7 +97,7 @@ The above example has a Sama Project already set up with inputs "name"(string), 
 
 The mapping json, **mapping.json.gotmpl**, contains your Sama Project inputs and values that will be sent during task creation. The values that you see in **{{ }}** are special variables used by the CLI and are replaced during task creation. The list of special variables are:
 - `"{{ .BaseName }}"` - gets replaced by the asset's name, e.g. image001.png.
--  "{{ .AssetFolderName }}" - gets replaced by the name of the containing folder. For example, the folder in s3 containing the asset.
+-  `"{{ .AssetFolderName }}"` - gets replaced by the name of the containing folder. For example, the folder in s3 containing the asset.
 - `"{{ .URL }}"` - gets replaced by the asset's URL path in Sama's S3, e.g. https&#65279;://sama-client-assets.s3.amazonaws.com/123/assets_batch001/image001.png
 - `"{{ .ClientBatchID }}"` - gets replaced by the string specified with the --client-batch-id flag
 - `"{{ .GroupID }}"` - gets replaced by a unique groupID when using the --group-size flag
