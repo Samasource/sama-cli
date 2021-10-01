@@ -9,4 +9,4 @@ With the Sama CLI, you can:
 - Generate a CVS or JSON of tasks to be created.
 - Monitor task creation.
 
-Please visit [docs.sama.com](https://docs.sama.com) for installation, usage, and command documentation for the Sama CLI.
+Please visit [docs.sama.com](https://docs.sama.com/reference/cli-overview) for installation, usage, and command documentation for the Sama CLI.
