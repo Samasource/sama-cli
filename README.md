@@ -9,4 +9,4 @@ With the Sama CLI, you can:
 - Monitor task creation.
 - Get deliveries of annotated tasks.
 
-Please visit [docs.sama.com](https://docs.sama.com/reference/cli-overview) for installation, usage, and command documentation for the Sama CLI.
+Please visit [docs.sama.com](https://samakb.readme.io/reference/cli-overview) for installation, usage, and command documentation for the Sama CLI.
